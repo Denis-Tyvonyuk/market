@@ -32,4 +32,6 @@ export const connectToDatabase = async () => {
   }
 
   console.log("Connect to db");
+
+  return cached.conn;
 };
