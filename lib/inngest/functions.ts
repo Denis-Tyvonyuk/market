@@ -1,6 +1,7 @@
 import { success } from "better-auth";
 import { inngest } from "./client";
 import { PERSONALIZED_WELCOME_EMAIL_PROMPT } from "./prompts";
+import { sendWelcomeEmail } from "../nodemailer";
 
 export const sendSignUpEmail = inngest.createFunction(
   { id: "sign-up-email" },
@@ -34,6 +35,16 @@ export const sendSignUpEmail = inngest.createFunction(
       const part = response.candidates?.[0]?.content?.parts?.[0];
       const introText =
         (part && "text" in part ? part.text : null) || "Thanks for joining";
+
+      const {
+        data: { email, name },
+      } = event;
+
+      return await sendWelcomeEmail({
+        email,
+        name,
+        intro: introText,
+      });
     });
 
     return {
